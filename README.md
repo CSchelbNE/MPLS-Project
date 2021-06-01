@@ -6,6 +6,8 @@ This is a multi-tennant mpls network. There are two customers (CEs) with indepen
 
 The Tier1ISP's loopback is used to simulate globally routed traffic. It is not advertised in the bgp peering with the IGW. It is only reachable via the default route propogated inside the MPLS backbone. The loopbacks on the Customersite routers are used to simulate local end user traffic so any ping/traceroute commands should use loopbacks as the source in order to check for reachability. 
 
+
+
 CE Sites:
 Both customers use OSPF as their internal routing protocol. A prefix-list is used to control the ospf redistribution of the CERemoteOffice's Loopbacks into bgp. This is in order
 to allow globally routed internet traffic a path back to the customer site via the MPLS backbone.
@@ -14,6 +16,8 @@ A virtual tunnel interface (VTI) is configured between the local and edge custom
 
 Even though MPLS creates a L3 VPN via segmenteation some regulatory requirements might dictate that CE-CE traffic must also be encrypted in transit. 
 The default route propogated from the CELocal site through ospf requires that all globally routed traffic from the remote sites must be passed over the VTI and through the LocalCE's connection to the ISP's mpls backbone.This, in theory, to allow for the LocalCE to filter all globally routed traffic coming from the RemoteCE through a firewall.
+
+
 
 Provider MPLS Backbone:
 
@@ -28,7 +32,7 @@ There are three BGP confederations configured inside of AS222. This is in order 
 
 MPLS is configured to allow label switching for the default route to the IGW. 
 
-OSPF is used for reachability within the MPLS core. iBGP is used to exchange prefixes between the PEs and the IGW. 
+OSPF is used for reachability within the MPLS core. iBGP is used to exchange vpnv4 prefixes between the PEs and the IGW. 
 
 
 
