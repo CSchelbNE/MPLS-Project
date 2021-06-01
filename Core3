@@ -1,1 +1,147 @@
+Core3#show running-config
+Building configuration...
+
+Current configuration : 1760 bytes
+!
+upgrade fpd auto
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Core3
+!
+boot-start-marker
+boot-end-marker
+!
+logging message-counter syslog
+!
+no aaa new-model
+ip source-route
+no ip icmp rate-limit unreachable
+ip cef
+!
+!
+!
+!
+no ip domain lookup
+no ipv6 cef
+!
+multilink bundle-name authenticated
+mpls ip default-route
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+archive
+ log config
+  hidekeys
+!
+!
+!
+!
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+interface Loopback0
+ ip address 33.33.33.33 255.255.255.255
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+ duplex half
+!
+interface FastEthernet1/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet1/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet2/0
+ ip address 11.0.1.2 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet3/0
+ ip address 11.0.4.1 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet4/0
+ ip address 11.0.6.2 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet5/0
+ ip address 11.3.0.1 255.255.255.252
+ negotiation auto
+!
+router ospf 222
+ mpls ldp autoconfig area 222
+ router-id 33.33.33.33
+ log-adjacency-changes
+ network 11.0.1.0 0.0.0.3 area 222
+ network 11.0.4.0 0.0.0.3 area 222
+ network 11.0.6.0 0.0.0.3 area 222
+ network 11.3.0.0 0.0.0.3 area 222
+ network 33.33.33.33 0.0.0.0 area 222
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+!
+no cdp log mismatch duplex
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ login
+!
+end
+
 
