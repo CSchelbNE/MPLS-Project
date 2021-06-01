@@ -1,7 +1,7 @@
-AS6501LocalEdge#show running-config
+AS6501RemoteEdge#show running-config
 Building configuration...
 
-Current configuration : 2032 bytes
+Current configuration : 2415 bytes
 !
 upgrade fpd auto
 version 12.4
@@ -9,7 +9,7 @@ service timestamps debug datetime msec
 service timestamps log datetime msec
 no service password-encryption
 !
-hostname AS6501LocalEdge
+hostname AS6501RemoteEdge
 !
 boot-start-marker
 boot-end-marker
@@ -54,13 +54,13 @@ crypto isakmp policy 1
  authentication pre-share
  group 14
  lifetime 3600
-crypto isakmp key DefaultHashGenPassword address 11.66.0.2 255.255.255.252
+crypto isakmp key DefaultHashGenPassword address 11.65.0.1 255.255.255.252
 !
 !
-crypto ipsec transform-set Vpn6501 esp-aes esp-sha-hmac
+crypto ipsec transform-set VPN6501 esp-aes esp-sha-hmac
 !
-crypto ipsec profile 6501VPN
- set transform-set Vpn6501
+crypto ipsec profile VPN6501
+ set transform-set VPN6501
 !
 !
 !
@@ -71,79 +71,73 @@ ip tcp synwait-time 5
 !
 !
 interface Loopback0
- ip address 65.65.65.65 255.255.255.255
+ ip address 66.66.66.66 255.255.255.255
 !
 interface Tunnel0
  ip unnumbered Loopback0
  tunnel source FastEthernet0/0
- tunnel destination 11.66.0.2
+ tunnel destination 11.65.0.1
  tunnel mode ipsec ipv4
- tunnel protection ipsec profile 6501VPN
+ tunnel protection ipsec profile VPN6501
 !
 interface FastEthernet0/0
- ip address 11.65.0.1 255.255.255.252
+ ip address 11.66.0.2 255.255.255.252
  duplex half
 !
+interface FastEthernet1/0
+ ip address 192.168.66.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface FastEthernet1/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet2/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet2/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet3/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet3/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet4/0
+ no ip address
+ shutdown
+ negotiation auto
+!
 router ospf 6501
- router-id 65.65.65.65
+ router-id 66.66.66.66
  log-adjacency-changes
- network 65.65.65.65 0.0.0.0 area 0
- default-information originate
+ network 66.66.66.66 0.0.0.0 area 0
+ network 192.168.66.0 0.0.0.255 area 0
 !
 router bgp 6501
  no synchronization
  bgp log-neighbor-changes
- network 11.65.0.0 mask 255.255.255.252
- network 65.65.65.65 mask 255.255.255.255
- redistribute ospf 6501 route-map InternalLoop
- neighbor 11.65.0.2 remote-as 222
- neighbor 11.65.0.2 allowas-in
+ network 11.66.0.0 mask 255.255.255.252
+ network 66.66.66.66 mask 255.255.255.255
+ neighbor 11.66.0.1 remote-as 222
+ neighbor 11.66.0.1 allowas-in
  no auto-summary
 !
-ip forward-protocol nd
-ip route 66.66.66.66 255.255.255.255 Tunnel0
-no ip http server
-no ip http secure-server
-!
-!
-!
-!
-ip prefix-list InternalLoop seq 5 permit 67.67.67.67/32
-no cdp log mismatch duplex
-!
-!
-!
-!
-route-map InternalLoop permit 1
- match ip address prefix-list InternalLoop
-!
-!
-!
-control-plane
-!
-!
-!
-!
-!
-!
-!
-gatekeeper
- shutdown
-!
-!
-line con 0
- exec-timeout 0 0
- privilege level 15
- logging synchronous
- stopbits 1
-line aux 0
- exec-timeout 0 0
- privilege level 15
- logging synchronous
- stopbits 1
-line vty 0 4
- login
-!
-end
 
 
