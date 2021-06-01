@@ -1,1 +1,152 @@
+Core2#show running-config
+Building configuration...
+
+Current configuration : 1895 bytes
+!
+upgrade fpd auto
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Core2
+!
+boot-start-marker
+boot-end-marker
+!
+logging message-counter syslog
+!
+no aaa new-model
+ip source-route
+no ip icmp rate-limit unreachable
+ip cef
+!
+!
+!
+!
+no ip domain lookup
+no ipv6 cef
+!
+multilink bundle-name authenticated
+mpls ip default-route
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+archive
+ log config
+  hidekeys
+!
+!
+!
+!
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+interface Loopback0
+ ip address 22.22.22.22 255.255.255.255
+!
+interface Port-channel2
+ ip address 11.0.7.6 255.255.255.252
+ mpls ip
+ hold-queue 150 in
+!
+interface Ethernet0/0
+ no ip address
+ shutdown
+ duplex auto
+!
+interface GigabitEthernet0/0
+ no ip address
+ duplex full
+ speed 1000
+ media-type gbic
+ negotiation auto
+ channel-group 2
+!
+interface GigabitEthernet1/0
+ no ip address
+ negotiation auto
+ channel-group 2
+!
+interface GigabitEthernet2/0
+ ip address 11.0.5.2 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet3/0
+ ip address 11.0.4.2 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet4/0
+ ip address 11.0.3.2 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet5/0
+ ip address 11.4.0.1 255.255.255.252
+ negotiation auto
+!
+router ospf 222
+ mpls ldp autoconfig area 222
+ router-id 22.22.22.22
+ log-adjacency-changes
+ network 11.0.3.0 0.0.0.3 area 222
+ network 11.0.4.0 0.0.0.3 area 222
+ network 11.0.5.0 0.0.0.3 area 222
+ network 11.4.0.0 0.0.0.3 area 222
+ network 22.22.22.22 0.0.0.0 area 222
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+!
+no cdp log mismatch duplex
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ login
+!
+end
 
